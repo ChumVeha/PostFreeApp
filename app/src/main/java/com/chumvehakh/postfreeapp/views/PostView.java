@@ -10,5 +10,5 @@ public interface PostView {
     void onError(String message);
     void onSuccess(String message);
     void onGetPostSuccess(List<PostsItem> postsItemList);
-
+    void onGetPostByIdSuccess(PostsItem data);
 }
