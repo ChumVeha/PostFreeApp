@@ -1,5 +1,6 @@
 package com.chumvehakh.postfreeapp;
 
+import android.content.Intent;
 import android.graphics.PostProcessor;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.chumvehakh.postfreeapp.app.BaseActivity;
 import com.chumvehakh.postfreeapp.models.response.PostResponse;
 import com.chumvehakh.postfreeapp.models.response.PostsItem;
 import com.chumvehakh.postfreeapp.presenters.PostPresenter;
+import com.chumvehakh.postfreeapp.ui.PostDetailActivity;
 import com.chumvehakh.postfreeapp.views.PostView;
 
 import java.util.List;
@@ -77,8 +79,23 @@ public class MainActivity extends BaseActivity implements PostView {
 
     @Override
     public void onGetPostSuccess(List<PostsItem> postsItemList) {
-        postAdapter = new PostAdapter(postsItemList, this);
+        postAdapter = new PostAdapter(postsItemList, this, new PostAdapter.OnClickListener() {
+            @Override
+            public void onClickCard(View view, PostsItem postsItem) {
+                postPresenter.getPostById(postsItem.getId());
+            }
+        });
         recyclerViewPost.setAdapter(postAdapter);
         recyclerViewPost.setLayoutManager(new GridLayoutManager(this, 1));
+    }
+
+    @Override
+    public void onGetPostByIdSuccess(PostsItem data) {
+        if (data != null){
+            Intent intent = new Intent(this, PostDetailActivity.class);
+            intent.putExtra("TITLE", data.getTitle());
+            intent.putExtra("BODY", data.getBody());
+            startActivity(intent);
+        }
     }
 }

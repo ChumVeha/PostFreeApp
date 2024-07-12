@@ -9,6 +9,7 @@ import com.chumvehakh.postfreeapp.adapter.PostAdapter;
 import com.chumvehakh.postfreeapp.api.APIClient;
 import com.chumvehakh.postfreeapp.api.APIInterface;
 import com.chumvehakh.postfreeapp.models.response.PostResponse;
+import com.chumvehakh.postfreeapp.models.response.PostsItem;
 import com.chumvehakh.postfreeapp.views.PostView;
 
 import retrofit2.Call;
@@ -39,6 +40,24 @@ public class PostPresenter {
             @Override
             public void onFailure(Call<PostResponse> call, Throwable throwable) {
                 view.onHidingLoading();
+            }
+        });
+    }
+    public void getPostById(int id){
+        view.onLoading();
+        apiInterface.getPostById(id).enqueue(new Callback<PostsItem>() {
+            @Override
+            public void onResponse(Call<PostsItem> call, Response<PostsItem> response) {
+                view.onHidingLoading();
+                if (response.isSuccessful() && response.body() != null){
+                    view.onGetPostByIdSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostsItem> call, Throwable throwable) {
+                view.onHidingLoading();
+                view.onSuccess(throwable.getLocalizedMessage());
             }
         });
     }
