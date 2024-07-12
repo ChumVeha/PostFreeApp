@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity implements PostView {
 
     @Override
     public void onGetPostSuccess(List<PostsItem> postsItemList) {
-        postPresenter = new PostPresenter(this);
+        postAdapter = new PostAdapter(postsItemList, this);
         recyclerViewPost.setAdapter(postAdapter);
         recyclerViewPost.setLayoutManager(new GridLayoutManager(this, 1));
     }
